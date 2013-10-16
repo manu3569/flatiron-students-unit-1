@@ -1,5 +1,5 @@
 class Student
-  attr_accessor :name, :twitter, :linkedin, :facebook, :website, :saved
+  attr_accessor :name, :twitter, :linkedin, :facebook, :website, :saved, :quote, :bio, :work
   attr_reader :id
 
   ATTRIBUTES = {
@@ -8,13 +8,27 @@ class Student
     :twitter=>"TEXT", 
     :linkedin=>"TEXT", 
     :facebook=>"TEXT", 
-    :website=>"TEXT"
+    :website=>"TEXT",
+    :quote=>"TEXT",
+    :bio=>"TEXT",
+    :work=>"TEXT"
   }
 
   @@students = []
   @@db=SQLite3::Database.new('students.db')
 
-  def initialize
+  def initialize(hash=nil)
+    if !hash.nil?
+      @name = hash[:name]
+      @twitter = hash[:twitter]
+      @linkedin = hash[:linkedin]
+      @github = hash[:github]
+      @facebook = hash[:facebook]
+      @website = hash[:website]
+      @quote = hash[:quote]
+      @bio = hash[:bio]
+      @work = hash[:work]
+    end
     if @@students.count == 0
       @id = 1
     else
@@ -34,6 +48,18 @@ class Student
 
   def self.find_by_name(name)
     @@students.select { |s| s.name == name }
+  end
+
+  def self.find_by_bio(bio)
+    @@students.select { |s| s.bio == bio }
+  end
+
+  def self.find_by_work(work)
+    @@students.select { |s| s.work == work }
+  end
+
+  def self.find_by_quote(quote)
+    @@students.select { |s| s.quote == quote }
   end
 
   def self.find_by_twitter(twitter)
@@ -185,6 +211,8 @@ class Student
   # 
 
   def self.create_table
+    reset="DROP TABLE #{self.table_name}"
+    @@db.execute(reset)
     table="CREATE TABLE IF NOT EXISTS #{self.table_name} (#{self.columns_for_create});" 
     @@db.execute(table)
   end
