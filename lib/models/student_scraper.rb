@@ -1,6 +1,4 @@
 
-require 'nokogiri'
-require 'open-uri'
 
 class StudentScraper
   attr_accessor :main_index_url
