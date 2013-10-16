@@ -1,5 +1,4 @@
 
-
 class StudentScraper
   attr_accessor :main_index_url
 
@@ -15,9 +14,6 @@ class StudentScraper
       link.attr('href')
     end
     students = []
-
-
-
       students_array.each do |student|
         # Scrape each student page
         student_website = "#{self.main_index_url}/#{student}"

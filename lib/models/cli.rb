@@ -1,16 +1,10 @@
-require_relative './student.rb'
-require_relative './student_scrape.rb'
-
-# for the Student Site, maybe CLIStudent, so that:
-# CLIStudent.new(students) # Where students
-# are a bunch of student instances.
-
 
 class CLIStudent
   attr_accessor :students
 
   def initialize(students)
     @students = students
+    @prompt = "enter your command #=>> "
   end
 
   def exit
@@ -28,34 +22,39 @@ class CLIStudent
     self.call
   end
      
+  def input
+    gets.downcase.strip
+  end
+
+  def query_more_info(student)
+    puts "Would you like to see more info? (y/n)"
+    ans= input
+    if ans == "y"
+      puts "\n\n**********************"
+      puts "Bio: #{student.bio}"
+      puts "Quote: #{student.quote}"
+      puts "**********************\n\n"
+    end
+  end
+
   def find
     found = false
     puts " you can type an id or a name "
-    looking_for = gets.chomp
+    looking_for = input
     if looking_for.to_i > 0
       @students.find {|student|
       if student.id == looking_for.to_i
         found= true
         puts "#{student.name}"
-        puts "would you like to see more info? (y/n)"
-        ans= gets.chomp
-        if ans == "y"
-          puts "Bio: #{student.bio}"
-          puts "Quote: #{student.quote}"
-        end
+        query_more_info(student)
        end
       }
     else
       @students.find {|student|
-      if student.name == looking_for
+      if student.name.downcase.strip.include?(looking_for)
         found= true
         puts "#{student.name}"
-        puts "would you like to see more info?(y/n)"
-        ans= gets.chomp
-        if ans == "y"
-          puts "Bio: #{student.bio}"
-          puts "Quote: #{student.quote}"
-        end
+        query_more_info(student)
       end
       }
     end
@@ -75,7 +74,8 @@ class CLIStudent
     puts "you can always exit by typing exit"
     puts "to find students by name or id call find"
     puts "\n\n\n----------------------------------------"
-    command=gets.chomp
+    print @prompt
+    command=input
     case command
       when 'browse' then browse
       when 'exit' then exit
@@ -89,11 +89,3 @@ class CLIStudent
 
 end
 
-
-main_index_url = "http://students.flatironschool.com/"
-
-student_scrape = StudentScraper.new(main_index_url)
-
-student_hashes = student_scrape.call
-
-Student.import(student_hashes)

@@ -5,6 +5,7 @@ describe Student do
     before(:each) do
       Student.reset_all
       @student = Student.new.tap { |s| s.name = "Anything But Scott Oh Nevermind" }
+      
     end
 
     describe ".insert" do
