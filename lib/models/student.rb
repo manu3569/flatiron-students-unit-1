@@ -194,4 +194,12 @@ class Student
     @@db.execute("DELETE FROM #{table_name};")
   end
 
+  def self.import(student_hash)
+    student_hash.each do |student|
+      stu=Student.new(student)
+    end
+  end
+
 end
+
+
