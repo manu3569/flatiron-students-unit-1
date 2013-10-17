@@ -69,60 +69,17 @@
     @@students
   end
 
-  def self.find_by_name(name)
-    @@students.select { |s| s.name == name }
+  def self.generate_finders
+    ATTRIBUTES.keys.each do |attribute|
+      define_singleton_method("find_by_#{attribute}".to_sym) do |arg|
+        @@students.select { |s| s.send(attribute) == arg }
+      end
+    end
   end
-
-  def self.find_by_bio(bio)
-    @@students.select { |s| s.bio == bio }
-  end
-
-  def self.find_by_work(work)
-    @@students.select { |s| s.work == work }
-  end
-
-  def self.find_by_quote(quote)
-    @@students.select { |s| s.quote == quote }
-  end
-
-  def self.find_by_twitter(twitter)
-    @@students.select { |s| s.twitter == twitter }
-  end
-
-  def self.find_by_facebook(facebook)
-    @@students.select { |s| s.facebook == facebook }
-  end
-
-  def self.find_by_website(website)
-    @@students.select { |s| s.website == website }
-  end
-
-  def self.find_by_linkedin(linkedin)
-    @@students.select { |s| s.linkedin == linkedin }
-  end
-
-  def self.find_by_website(website)
-    @@students.select { |s| s.website == website }
-  end
-
-  def self.find_by_github(github)
-    @@students.select { |s| s.github == github }
-  end
-
-  def self.find_by_work(work)
-    @@students.select { |s| s.work == work }
-  end
-
-  def self.find_by_image_link(image_link)
-    @@students.select { |s| s.image_link == image_link }
-  end
+  Student.generate_finders
 
   def self.find(id)
     @@students.select { |s| s.id == id }.first
-  end
-
-  def self.find_by_id(id)
-    self.find(id)
   end
 
   def self.delete(id)

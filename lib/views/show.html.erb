@@ -94,7 +94,7 @@
       <!-- Begin Splash Image -->
       <div class="top-page-title"> 
         <div>
-          <img src="<%=@student.profile_image %>">
+          <img src="<%=@student.profile_image %>" class="student_pic">
         </div>
       </div>
       <! -- End Splash Image -->
@@ -211,10 +211,10 @@
                     </div>
                     <div class="clear"></div>
                     <p>
-                      - <a href="http://www.codeschool.com/">Code School</a><br>
-                      - <a href="http://teamtreehouse.com/">Treehouse</a><br>
+                      - <a href="<%= @student.code_school %>">Code School</a><br>
+                      - <a href="<%= @student.treehouse %>">Treehouse</a><br>
                       - <a href="http://www.codecademy.com/">Codecademy</a><br>
-                      - <a href="https://coderwall.com/">Coder Wall</a><br>
+                      - <a href="<%= @student.coder_wall %>">Coder Wall</a><br>
                     </p>
                   </div>
                 </div>
@@ -226,8 +226,11 @@
                     </div>
                     <div class="clear"></div>
                     <p>
-                      - <a href="http://ayc726.github.io/">Personal Blog</a><br>
-                      - <a href="#">Tumblr</a><br>
+                      <% if @student.blogs %>
+                        <% @student.blogs.each do |blog| %>
+                        - <a href="<%= blog[:link] %>"><%= blog[:text] %></a><br>
+                        <% end %>
+                      <% end %>
                     </p>
                   </div>
                 </div>
@@ -238,7 +241,7 @@
                       <h3>Personal Projects</h3>
                     </div>
                     <div class="clear"></div>
-                    <p>Comming Soon..</p>
+                    <p>Coming Soon..</p>
                   </div>
                 </div>
             </div>
@@ -259,10 +262,11 @@
                     </div>
                     <div class="clear"></div>
                     <p>
-                      <a>Singapore</a><br>
-                      <a>Seattle</a><br>
-                      <a>San Francisco</a><br>
-                      <a>New York</a><br>
+                      <% if @student.favorite_cities %>
+                        <% @student.favorite_cities.each do |city| %>
+                        <a><%= city %></a><br>
+                        <% end %>
+                      <% end %>
                     </p>
                   </div>
                 </div>
@@ -286,7 +290,7 @@
                     <h3>Flatiron School Projects</h3>
                   </div>
                   <div class="clear"></div>
-                  <p>Comming Soon..</p>
+                  <p>Coming Soon..</p>
                 </div>
               </div>
             </div>
