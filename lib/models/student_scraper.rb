@@ -7,58 +7,133 @@ class StudentScraper
     @student_page = Nokogiri::HTML(open(student.website))
   end
 
+  def parse_all
+    parse_name
+    parse_profile_image
+    parse_bg_image
+    parse_twitter
+    parse_linkedin
+    parse_github
+    parse_quote
+    parse_bio
+    parse_education
+    parse_work
+    parse_treehouse
+    parse_code_school
+    parse_coder_wall
+    parse_blogs
+    parse_favorite_cities
+    parse_favorites
+  end
+
   def parse_name
     student.name = student_page.css('h4.ib_main_header').text
   end
 
   def parse_twitter
-    student.twitter = student_page.css('.page-title .icon-twitter').parent.attr("href").value
-  end
-
-  def parse_linkedin
-    student.linkedin = student_page.css('.page-title .icon-linkedin-sign').parent.attr("href").value
+    if twitter_node = student_page.at_css(".page-title .icon-twitter")
+      student.twitter = twitter_node.parent.attr("href")
+    end
   end
 
   def parse_github
-    student.github = student_page.css('.page-title .icon-github').parent.attr("href").value
+    if github_node = student_page.at_css(".page-title .icon-github")
+      student.github = github_node.parent.attr("href")
+    end
   end
 
-  def call
-
-    students = []
-      students_array.each do |student|
-        # Scrape each student page
-        student_website = "#{self.main_index_url}/#{student}"
-        student_page = Nokogiri::HTML(open("#{student_website}")) rescue "404 Not Found"
-next if student_page == "404 Not Found"
-        
-        
-
-        quote = student_page.css('div.textwidget h3').text
-
-        text = student_page.css('div.services p').collect do |link|
-          link.content.strip if link.element_children.empty?
-        end
-        text = text.compact
-
-        # Insert data stored in variables into student_hash
-        
-        student_hash[:name] = name
-        student_hash[:twitter] = social_media[0]
-        student_hash[:linkedin] = social_media[1]
-        student_hash[:github] = social_media[2]
-        student_hash[:facebook] = social_media[3]
-        student_hash[:website] = student_website
-        student_hash[:quote] = quote
-        student_hash[:bio] = text[0]
-        student_hash[:work] = text[1]
-        
-        
-        students << student_hash
-      
-
+  def parse_linkedin
+    if linkedin_page_node = student_page.at_css(".page-title .icon-linkedin-sign")
+      student.linkedin = linkedin_page_node.parent.attr("href")
     end
-    students
+  end
+
+  def parse_quote
+    student.quote = student_page.css('div.textwidget h3').text
+  end
+
+  def content_for(pattern)
+    student_page.css("h3").each do |title_text| 
+      if title_text.text.strip.match(pattern)
+        return title_text.parent.parent.text.strip.sub(pattern, '').strip
+      end
+    end
+    nil
+  end
+
+  def parse_profile_image
+    image_path = student_page.css('.student_pic').attr("src").value
+    student.profile_image = relative?(image_path) ? make_absolute(image_path) : image_path
+  end  
+
+  def parse_bio
+    student.bio = content_for(/^Biography/i)
+  end
+
+  def parse_education
+    student.education = content_for(/^Education/i)
+  end
+
+  def parse_work
+    student.work = content_for(/^Work/i)
+  end
+
+  def parse_treehouse
+    if treehouse_node = student_page.at_css("img[alt='Treehouse']")
+      student.treehouse = treehouse_node.parent.attr("href")
+    end
+  end
+
+  def parse_code_school
+    if code_school_node = student_page.at_css("img[alt='Code School']")
+      student.code_school = code_school_node.parent.attr("href")
+    end
+  end
+
+  def parse_coder_wall
+    if coder_wall_node = student_page.at_css("img[alt='Coder Wall']")
+      student.coder_wall = coder_wall_node.parent.attr("href")
+    end
+  end
+
+  def parse_blogs
+    student_page.css("h3").each do |title_text| 
+      if title_text.text.strip.downcase == "blogs"
+        student.blogs = title_text.parent.parent.css("a").map do |link|
+          "#{link.text} - #{link.attr('href')}"
+        end.join("\n")
+      end
+    end
+  end
+
+  def parse_favorite_cities
+    student_page.css("h3").each do |title_text| 
+      if title_text.text.strip.downcase == "favorite cities"
+        student.favorite_cities = title_text.parent.parent.css("a").to_a.join("\n")
+      end
+    end
+  end
+
+  def parse_favorites
+    student_page.css("h3").each do |title_text| 
+      if title_text.text.strip.downcase == "favorites"
+        student.favorites = title_text.parent.parent.css("p").text.gsub(/^\s*- /,"")
+      end
+    end
+  end
+
+  def parse_bg_image
+    background_style = student_page.css('style').text
+    image_path = background_style.match(/background: url\(([^\)]+)/)[1]
+    student.bg_image = relative?(image_path) ? make_absolute(image_path) : image_path
+  end
+
+  def make_absolute(path)
+    "#{student.student_index}/students/#{path}"
+  end
+
+  def relative?(path)
+    !path.match(/^https?:\/\//)    
   end
 end
 

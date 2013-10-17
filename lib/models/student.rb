@@ -1,6 +1,7 @@
  class Student
-  attr_accessor :name, :twitter, :linkedin, :facebook, :website, :saved, :quote, :bio, :work, :image_link, :github, :index_image, :excerpt, :tagline
+
   attr_reader :id
+
 
   ATTRIBUTES = {
     :id=>"INTEGER PRIMARY KEY AUTOINCREMENT", 
@@ -9,15 +10,31 @@
     :linkedin=>"TEXT", 
     :facebook=>"TEXT", 
     :website=>"TEXT",
+    :student_index=>"TEXT",
     :quote=>"TEXT",
     :bio=>"TEXT",
     :work=>"TEXT",
-    :image_link=>"TEXT",
+    :education=>"TEXT",
+    :profile_image=>"TEXT",
+    :bg_image=>"TEXT",
     :github=>"TEXT",
     :index_image=>"TEXT",
     :excerpt=>"TEXT",
-    :tagline=>"TEXT"
+    :tagline=>"TEXT",
+    :favorites => "TEXT",
+    :favorite_cities => "TEXT",
+    :blogs => "TEXT",
+    :coder_wall => "TEXT",
+    :code_school => "TEXT",
+    :treehouse => "TEXT"
   }
+
+
+  def self.keys_minus_id
+    ATTRIBUTES.keys.reject {|k| k == :id}
+  end
+  
+  attr_accessor *self.keys_minus_id
 
   @@students = []
   @@db=SQLite3::Database.new('students.db')
@@ -124,9 +141,7 @@
     get_accessors.join(", ")
   end
   
-  def self.keys_minus_id
-    self.attribute_keys.reject {|k| k == :id}
-  end
+  
 
   def self.question_marks
     (["?"]*Student.attribute_keys.length).join(",")
