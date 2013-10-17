@@ -6,10 +6,21 @@ class SiteGenerator
 
   def generate
     generate_index
+    generate_student_page
   end
 
   def generate_index
     create_page("index.html", "index.html.erb")
+  end
+
+  def generate_student_page
+    @students.each do |student|
+      @student=student
+      create_page(
+        "#{self.class.standardize_path(student.name)}.html",
+       "show.html.erb"
+      )
+    end
   end
 
   def create_from_erb(template_path)

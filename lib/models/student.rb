@@ -1,5 +1,5 @@
-class Student
-  attr_accessor :name, :twitter, :linkedin, :facebook, :website, :saved, :quote, :bio, :work, :image_link
+ class Student
+  attr_accessor :name, :twitter, :linkedin, :facebook, :website, :saved, :quote, :bio, :work, :image_link, :github
   attr_reader :id
 
   ATTRIBUTES = {
@@ -12,7 +12,8 @@ class Student
     :quote=>"TEXT",
     :bio=>"TEXT",
     :work=>"TEXT",
-    :image_link=>"TEXT"
+    :image_link=>"TEXT",
+    :github=>"TEXT"
   }
 
   @@students = []
