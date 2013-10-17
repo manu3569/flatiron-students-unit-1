@@ -101,23 +101,23 @@
 
               <li class="home-blog-post">
                 <div class="blog-thumb">
-                  <a href="<%=SiteGenerator.standardize_path(student.name)%>">
-                    <img width="304" height="304" class="prof-image" src="<%=student.image_link%>" class="attachment-blog-thumb wp-post-image" alt="student_name">
+                  <a href="<%= SiteGenerator.student_path(student.name) %>">
+                    <img width="304" height="304" class="prof-image" src="<%=student.index_image%>" class="attachment-blog-thumb wp-post-image" alt="student_name">
                   </a>
                 </div>
 
                 <div class="blog-title">
                   <div class="big-comment">
                     <h3>
-                      <a href="<%=SiteGenerator.student_path(student.name)%>"><%=student.name%></a>
+                      <a href="<%= SiteGenerator.student_path(student.name) %>"><%=student.name%></a>
                     </h3>
                   </div>
-                  <p class="home-blog-post-meta">INSERT TAGLINE</p>
+                  <p class="home-blog-post-meta"><%= student.tagline %></p>
                 </div>
                 <div class="clear"></div>
 
                 <div class="excerpt">
-                  <p>INSERT BIO EXCERPT </p>
+                  <p><%= student.excerpt %></p>
                 </div>
                 <div class="clear"></div>
               </li>

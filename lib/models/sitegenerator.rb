@@ -34,7 +34,7 @@ class SiteGenerator
   end
 
   def self.standardize_path(name)
-    name.downcase.gsub(" ", "_")
+    name.downcase.gsub(" ", "-")
   end
 
 

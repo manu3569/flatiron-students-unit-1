@@ -7,4 +7,4 @@ Student.all.each do |student|
 
 end  
 
-# SiteGenerator.run
+SiteGenerator.run
