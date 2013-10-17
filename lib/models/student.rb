@@ -140,14 +140,6 @@
     @saved=true
   end
 
-# UPDATE Customers
-# SET ContactName='Alfred Schmidt', City='Hamburg'
-# WHERE CustomerName='Alfreds Futterkiste';
-
-  # self.send(:insert)
-
-# ("key"=self.key)
-
   def attributes_without_id
     create_attribute_hash.reject{|key|key==:id}
   end
@@ -178,7 +170,6 @@
   def self.attribute_keys
     ATTRIBUTES.keys
   end
-#=> [:id, :name, :twitter, :linkedin, :website]
 
   def get_accessors
     self.class.keys_minus_id.collect do |key|
@@ -199,11 +190,6 @@
     end
   end
 
-  # instance.id
-  # match instance.id to id in sql table
-  # create a new instance with data from that instanc.id's row
-  # 
-
   def self.create_table
     reset="DROP TABLE #{self.table_name}"
     @@db.execute(reset)
@@ -216,13 +202,4 @@
     @@db.execute("DELETE FROM #{table_name};")
   end
 
-  # def self.import(student_hash)
-  #   student_hash.each do |student|
-  #     stu=Student.new(student)
-  #     stu.save
-  #   end
-  # end
-
 end
-
-
