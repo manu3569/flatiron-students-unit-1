@@ -97,11 +97,12 @@ class StudentScraper
   end
 
   def parse_blogs
+    pattern = /^(Blogs?|Websites?)$/i
     student_page.css("h3").each do |title_text| 
-      if title_text.text.strip.downcase == "blogs"
-        student.blogs = title_text.parent.parent.css("a").map do |link|
-          "#{link.text} - #{link.attr('href')}"
-        end.join("\n")
+      if title_text.text.strip.downcase =~ pattern
+        student.blogs = title_text.parent.parent.css("a").collect do |link|
+          { text: link.text, link: link.attr("href") }
+        end
       end
     end
   end
@@ -109,7 +110,7 @@ class StudentScraper
   def parse_favorite_cities
     student_page.css("h3").each do |title_text| 
       if title_text.text.strip.downcase == "favorite cities"
-        student.favorite_cities = title_text.parent.parent.css("a").to_a.join("\n")
+        student.favorite_cities = title_text.parent.parent.css("a").to_a
       end
     end
   end

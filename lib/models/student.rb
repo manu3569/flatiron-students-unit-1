@@ -69,60 +69,17 @@
     @@students
   end
 
-  def self.find_by_name(name)
-    @@students.select { |s| s.name == name }
+  def self.generate_finders
+    ATTRIBUTES.keys.each do |attribute|
+      define_singleton_method("find_by_#{attribute}".to_sym) do |arg|
+        @@students.select { |s| s.send(attribute) == arg }
+      end
+    end
   end
-
-  def self.find_by_bio(bio)
-    @@students.select { |s| s.bio == bio }
-  end
-
-  def self.find_by_work(work)
-    @@students.select { |s| s.work == work }
-  end
-
-  def self.find_by_quote(quote)
-    @@students.select { |s| s.quote == quote }
-  end
-
-  def self.find_by_twitter(twitter)
-    @@students.select { |s| s.twitter == twitter }
-  end
-
-  def self.find_by_facebook(facebook)
-    @@students.select { |s| s.facebook == facebook }
-  end
-
-  def self.find_by_website(website)
-    @@students.select { |s| s.website == website }
-  end
-
-  def self.find_by_linkedin(linkedin)
-    @@students.select { |s| s.linkedin == linkedin }
-  end
-
-  def self.find_by_website(website)
-    @@students.select { |s| s.website == website }
-  end
-
-  def self.find_by_github(github)
-    @@students.select { |s| s.github == github }
-  end
-
-  def self.find_by_work(work)
-    @@students.select { |s| s.work == work }
-  end
-
-  def self.find_by_image_link(image_link)
-    @@students.select { |s| s.image_link == image_link }
-  end
+  Student.generate_finders
 
   def self.find(id)
     @@students.select { |s| s.id == id }.first
-  end
-
-  def self.find_by_id(id)
-    self.find(id)
   end
 
   def self.delete(id)
@@ -183,14 +140,6 @@
     @saved=true
   end
 
-# UPDATE Customers
-# SET ContactName='Alfred Schmidt', City='Hamburg'
-# WHERE CustomerName='Alfreds Futterkiste';
-
-  # self.send(:insert)
-
-# ("key"=self.key)
-
   def attributes_without_id
     create_attribute_hash.reject{|key|key==:id}
   end
@@ -221,7 +170,6 @@
   def self.attribute_keys
     ATTRIBUTES.keys
   end
-#=> [:id, :name, :twitter, :linkedin, :website]
 
   def get_accessors
     self.class.keys_minus_id.collect do |key|
@@ -242,11 +190,6 @@
     end
   end
 
-  # instance.id
-  # match instance.id to id in sql table
-  # create a new instance with data from that instanc.id's row
-  # 
-
   def self.create_table
     reset="DROP TABLE #{self.table_name}"
     @@db.execute(reset)
@@ -259,13 +202,4 @@
     @@db.execute("DELETE FROM #{table_name};")
   end
 
-  # def self.import(student_hash)
-  #   student_hash.each do |student|
-  #     stu=Student.new(student)
-  #     stu.save
-  #   end
-  # end
-
 end
-
-
