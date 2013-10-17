@@ -17,7 +17,7 @@ class SiteGenerator
     @students.each do |student|
       @student=student
       create_page(
-        "#{self.class.standardize_path(student.name)}.html",
+        "students/#{self.class.standardize_path(student.name)}.html",
        "show.html.erb"
       )
     end
