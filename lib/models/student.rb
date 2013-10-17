@@ -1,5 +1,5 @@
 class Student
-  attr_accessor :name, :twitter, :linkedin, :facebook, :website, :saved, :quote, :bio, :work
+  attr_accessor :name, :twitter, :linkedin, :facebook, :website, :saved, :quote, :bio, :work, :image_link
   attr_reader :id
 
   ATTRIBUTES = {
@@ -11,7 +11,8 @@ class Student
     :website=>"TEXT",
     :quote=>"TEXT",
     :bio=>"TEXT",
-    :work=>"TEXT"
+    :work=>"TEXT",
+    :image_link=>"TEXT"
   }
 
   @@students = []
@@ -20,6 +21,7 @@ class Student
   def initialize(hash=nil)
     if !hash.nil?
       @name = hash[:name]
+      @image_link = hash[:image]
       @twitter = hash[:twitter]
       @linkedin = hash[:linkedin]
       @github = hash[:github]
@@ -225,6 +227,7 @@ class Student
   def self.import(student_hash)
     student_hash.each do |student|
       stu=Student.new(student)
+      stu.save
     end
   end
 
