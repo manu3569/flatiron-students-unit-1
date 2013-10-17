@@ -38,6 +38,11 @@ class SiteGenerator
   end
 
 
+  def self.student_path(name)
+    "students/#{standardize_path(name)}.html"
+  end
+
+
   def self.run
     sg = SiteGenerator.new()
     sg.generate

@@ -1,18 +1,30 @@
 
 class StudentScraper
-  attr_accessor :main_index_url
+  attr_accessor :student_page, :student
 
-  def initialize(main_index_url)
-    @main_index_url = main_index_url
+  def initialize(student)
+    @student=student
+    @student_page = Nokogiri::HTML(open(student.website))
+  end
+
+  def parse_name
+    student.name = student_page.css('h4.ib_main_header').text
+  end
+
+  def parse_twitter
+    student.twitter = student_page.css('.page-title .icon-twitter').parent.attr("href").value
+  end
+
+  def parse_linkedin
+    student.linkedin = student_page.css('.page-title .icon-linkedin-sign').parent.attr("href").value
+  end
+
+  def parse_github
+    student.github = student_page.css('.page-title .icon-github').parent.attr("href").value
   end
 
   def call
 
-    index_page = Nokogiri::HTML(open("#{self.main_index_url}"))
-
-    students_array = index_page.css('li.home-blog-post div.blog-thumb a').collect do |link|
-      link.attr('href')
-    end
     students = []
       students_array.each do |student|
         # Scrape each student page
@@ -20,11 +32,7 @@ class StudentScraper
         student_page = Nokogiri::HTML(open("#{student_website}")) rescue "404 Not Found"
 next if student_page == "404 Not Found"
         
-        name = student_page.css('h4.ib_main_header').text
-
-        social_media = student_page.css('div.social-icons a').collect do |link|
-          link.attr('href')
-        end
+        
 
         quote = student_page.css('div.textwidget h3').text
 
@@ -34,7 +42,7 @@ next if student_page == "404 Not Found"
         text = text.compact
 
         # Insert data stored in variables into student_hash
-        student_hash = {}
+        
         student_hash[:name] = name
         student_hash[:twitter] = social_media[0]
         student_hash[:linkedin] = social_media[1]

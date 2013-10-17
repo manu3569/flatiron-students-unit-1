@@ -1,5 +1,5 @@
  class Student
-  attr_accessor :name, :twitter, :linkedin, :facebook, :website, :saved, :quote, :bio, :work, :image_link, :github
+  attr_accessor :name, :twitter, :linkedin, :facebook, :website, :saved, :quote, :bio, :work, :image_link, :github, :index_image, :excerpt, :tagline
   attr_reader :id
 
   ATTRIBUTES = {
@@ -13,7 +13,10 @@
     :bio=>"TEXT",
     :work=>"TEXT",
     :image_link=>"TEXT",
-    :github=>"TEXT"
+    :github=>"TEXT",
+    :index_image=>"TEXT",
+    :excerpt=>"TEXT",
+    :tagline=>"TEXT"
   }
 
   @@students = []
@@ -79,6 +82,22 @@
 
   def self.find_by_linkedin(linkedin)
     @@students.select { |s| s.linkedin == linkedin }
+  end
+
+  def self.find_by_website(website)
+    @@students.select { |s| s.website == website }
+  end
+
+  def self.find_by_github(github)
+    @@students.select { |s| s.github == github }
+  end
+
+  def self.find_by_work(work)
+    @@students.select { |s| s.work == work }
+  end
+
+  def self.find_by_image_link(image_link)
+    @@students.select { |s| s.image_link == image_link }
   end
 
   def self.find(id)
