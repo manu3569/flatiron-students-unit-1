@@ -8,5 +8,3 @@ require_relative '../lib/models/cli.rb'
 require_relative '../lib/models/student_scraper.rb'
 require_relative '../lib/models/sitegenerator.rb'
 require_relative '../lib/models/index_scraper.rb'
-
-  .
